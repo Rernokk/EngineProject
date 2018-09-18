@@ -25,39 +25,63 @@
     <Filter Include="Source Files\Behaviours">
       <UniqueIdentifier>{94424827-18b6-48bb-a6ef-52daf5cfe3a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{34cd0f11-5f79-4071-bedc-56535ad4286f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestBehaviour.h">
-      <Filter>Header Files\Behaviours</Filter>
+    <ClInclude Include="Singleton.h">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="GameBehaviour.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MonoBehaviour.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="GameManager.h">
+    <ClInclude Include="MemoryManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystemManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Header Files\Managers</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameManager.cpp">
+    <ClCompile Include="MemoryManager.cpp">
       <Filter>Source Files\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="InputManager.cpp">
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Source Files\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystemManager.cpp">
+      <Filter>Source Files\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderManager.cpp">
+      <Filter>Source Files\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationManager.cpp">
+      <Filter>Source Files\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsManager.cpp">
       <Filter>Source Files\Manager</Filter>
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="TestBehaviour.cpp">
-      <Filter>Source Files\Behaviours</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -115,18 +115,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="GameBehaviour.h" />
-    <ClInclude Include="GameManager.h" />
-    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="AnimationManager.h" />
+    <ClInclude Include="FileSystemManager.h" />
+    <ClInclude Include="MemoryManager.h" />
+    <ClInclude Include="MonoBehaviour.h" />
+    <ClInclude Include="PhysicsManager.h" />
+    <ClInclude Include="RenderManager.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="SoundManager.h" />
-    <ClInclude Include="TestBehaviour.h" />
+    <ClInclude Include="TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="AnimationManager.cpp" />
+    <ClCompile Include="FileSystemManager.cpp" />
+    <ClCompile Include="MemoryManager.cpp" />
+    <ClCompile Include="PhysicsManager.cpp" />
+    <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="SoundManager.cpp" />
-    <ClCompile Include="TestBehaviour.cpp" />
+    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

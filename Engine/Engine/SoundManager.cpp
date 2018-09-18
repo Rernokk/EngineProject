@@ -1,7 +1,13 @@
 #include "SoundManager.h"
 
-using namespace std;
+void SoundManager::Start() {
+	cout << "Sound Manager Start" << endl;
+}
 
-void SoundManager::Print() {
-	cout << "This is the sound manager." << endl;
+void SoundManager::Update() {
+	cout << "Sound Manager Update" << endl;
+}
+
+void SoundManager::Shutdown() {
+	cout << "Sound Manager Shutdown" << endl;
 }
