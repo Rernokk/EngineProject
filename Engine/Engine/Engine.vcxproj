@@ -117,6 +117,7 @@
   <ItemGroup>
     <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="FileSystemManager.h" />
+    <ClInclude Include="IMemoryManager.h" />
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="MonoBehaviour.h" />
     <ClInclude Include="PhysicsManager.h" />
@@ -124,6 +125,7 @@
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationManager.cpp" />
@@ -134,6 +136,7 @@
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
