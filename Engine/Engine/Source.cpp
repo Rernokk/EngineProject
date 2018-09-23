@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <chrono>
 
 #include "MonoBehaviour.h"
 
@@ -46,24 +47,33 @@ int main() {
 		}
 		cout << endl;
 	}
+	auto t1 = chrono::high_resolution_clock::now();
+	for (int j = 0; j < 5000; j++){
+		Vector3* ptr;
+		for (int i = 0; i < 1000; i++) {
+			ptr = (Vector3*) malloc(sizeof(Vector3));
+			(*ptr) = Vector3();
+			ptr = NULL;
+			free(ptr);
+		}
+	}
+	auto t2 = chrono::high_resolution_clock::now();
+	cout << "<New> Time Taken: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << " milliseconds." << endl;
 
-	Vector3* vec = new Vector3(1, 1, 1);
-	//cout << vec->x << ", " << vec->y << ", " << vec->z << endl;
-	*vec = (*vec) * 3;
-	cout << *vec << endl;
-	*vec = (*vec) + new Vector3(1, -1, 1);
-	cout << *vec << endl;
-	*vec = (*vec) - new Vector3(1, -1, 1);
-	cout << *vec << endl;
-	vec = new Vector3(1, 0, 0);
-	Vector3* vecB = new Vector3(5, 1, 0);
-	cout << *vecB << endl;
-	float val = (*vec) * (*vecB);
-	cout << "Dot: " << val << endl;
-	*vec = vec->Normalize();
-	cout << *vec << endl;
-	val = vec->Length();
-	cout << "Length: " << val << endl;
+	t1 = chrono::high_resolution_clock::now();
+	for (int j = 0; j < 5000; j++) {
+		Vector3* ptr;
+		for (int i = 0; i < 1000; i++) {
+			ptr = new Vector3();
+			delete (ptr);
+		}
+	}
+	t2 = chrono::high_resolution_clock::now();
+	cout << "<Allocate> Time Taken: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << " milliseconds." << endl;
+
+	/*Vector3* vec = new Vector3(1, 1, 1);
+	void* space = MemoryManager::getInstance().Allocate(sizeof(Vector3));
+	space = new Vector3(1,1,1);*/
 
 	cout << "Pause..." << endl;
 	char c;
