@@ -47,10 +47,21 @@ int main() {
 		}
 		cout << endl;
 	}
+
+	cout << "Attempting to normalize zero vector:" << endl;
+	Vector3* zVec = new Vector3();
+	cout << *zVec << endl;
+	*zVec = zVec->Normalize();
+	cout << *zVec << endl;
+
+	int net = 0;
+	int objCount = 10000;
+	int iterationCount = 5000;
+
 	auto t1 = chrono::high_resolution_clock::now();
-	for (int j = 0; j < 5000; j++){
+	for (int j = 0; j < iterationCount; j++){
 		Vector3* ptr;
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < objCount; i++) {
 			ptr = (Vector3*) malloc(sizeof(Vector3));
 			(*ptr) = Vector3();
 			ptr = NULL;
@@ -58,22 +69,85 @@ int main() {
 		}
 	}
 	auto t2 = chrono::high_resolution_clock::now();
-	cout << "<New> Time Taken: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << " milliseconds." << endl;
+	cout << "Traditional: Time Taken: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << " milliseconds." << endl;
+	cout << "Allocated and deallocated memory for " << objCount << " Vector3s " << iterationCount << " times." << endl << endl;
+	net = chrono::duration_cast<chrono::milliseconds>(t2 - t1).count();
 
 	t1 = chrono::high_resolution_clock::now();
-	for (int j = 0; j < 5000; j++) {
+	for (int j = 0; j < iterationCount; j++) {
 		Vector3* ptr;
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < objCount; i++) {
 			ptr = new Vector3();
 			delete (ptr);
 		}
 	}
 	t2 = chrono::high_resolution_clock::now();
-	cout << "<Allocate> Time Taken: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << " milliseconds." << endl;
+	cout << "MemoryManager:  Time Taken: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << " milliseconds." << endl;
+	cout << "Allocated and deallocated memory for " << objCount << " Vector3s " << iterationCount << " times." << endl << endl;
+	net -= chrono::duration_cast<chrono::milliseconds>(t2 - t1).count();
+	cout << "Difference of " << net << " milliseconds when using our new methods." << endl << endl;
 
-	/*Vector3* vec = new Vector3(1, 1, 1);
-	void* space = MemoryManager::getInstance().Allocate(sizeof(Vector3));
-	space = new Vector3(1,1,1);*/
+	cout << "---------------------------------------------------------------------------" << endl << endl;
+
+	//Strings
+	//Original
+	t1 = chrono::high_resolution_clock::now();
+	for (int j = 0; j < iterationCount; j++) {
+		string* ptr;
+		for (int i = 0; i < objCount; i++) {
+			ptr = (string*)malloc(sizeof(string));
+			//(*ptr) = 25.0;
+			ptr = NULL;
+			free(ptr);
+		}
+	}
+	t2 = chrono::high_resolution_clock::now();
+	cout << "Traditional: Time Taken: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << " milliseconds." << endl;
+	cout << "Allocated and deallocated memory for " << objCount << " Strings " << iterationCount << " times." << endl << endl;
+
+	//Extended
+	t1 = chrono::high_resolution_clock::now();
+	for (int j = 0; j < iterationCount; j++) {
+		string* ptr;
+		for (int i = 0; i < objCount; i++) {
+			ptr = (string*)MemoryManager::getInstance().Allocate(sizeof(string));
+			MemoryManager::getInstance().Free(ptr);
+		}
+	}
+	t2 = chrono::high_resolution_clock::now();
+	cout << "MemoryManager:  Time Taken: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << " milliseconds." << endl;
+	cout << "Allocated and deallocated memory for " << objCount << " Strings " << iterationCount << " times." << endl << endl;
+
+	cout << "---------------------------------------------------------------------------" << endl << endl;
+
+	//Doubles
+	//Original
+	t1 = chrono::high_resolution_clock::now();
+	for (int j = 0; j < iterationCount; j++) {
+		double* ptr;
+		for (int i = 0; i < objCount; i++) {
+			ptr = (double*) malloc(sizeof(double));
+			(*ptr) = 25.0;
+			ptr = NULL;
+			free(ptr);
+		}
+	}
+	t2 = chrono::high_resolution_clock::now();
+	cout << "Traditional: Time Taken: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << " milliseconds." << endl;
+	cout << "Allocated and deallocated memory for " << objCount << " Doubles " << iterationCount << " times." << endl << endl;
+
+	//Extended
+	t1 = chrono::high_resolution_clock::now();
+	for (int j = 0; j < iterationCount; j++) {
+		double* ptr;
+		for (int i = 0; i < objCount; i++) {
+			ptr = (double*) MemoryManager::getInstance().Allocate(sizeof(double));
+			MemoryManager::getInstance().Free(ptr);
+		}
+	}
+	t2 = chrono::high_resolution_clock::now();
+	cout << "MemoryManager:  Time Taken: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << " milliseconds." << endl;
+	cout << "Allocated and deallocated memory for " << objCount << " Doubles " << iterationCount << " times." << endl << endl;
 
 	cout << "Pause..." << endl;
 	char c;

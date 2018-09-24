@@ -51,8 +51,13 @@ Vector3 Vector3::operator- (Vector3* other) {
 
 Vector3 Vector3::Normalize() {
 	try {
+		float len = Length();
+		if (len == 0) {
+			cout << "Divide by Zero Error!" << endl;
+			return (*this);
+		}
 	}
-	catch (int e) {
+	catch (string e) {
 		cout << "Error" << endl;
 	}
 	return Vector3(x / Length(), y / Length(), z / Length());

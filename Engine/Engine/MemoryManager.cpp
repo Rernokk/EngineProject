@@ -6,7 +6,7 @@
 void MemoryManager::Start() {
 	cout << "Memory Manager Start" << endl;
 	freeStoreHead = 0;
-	ExpandPoolSize();
+	ExpandPoolSize(1);
 }
 
 void MemoryManager::Update() {
@@ -19,7 +19,7 @@ void MemoryManager::Shutdown() {
 
 void* MemoryManager::Allocate(size_t size) {
 	if (freeStoreHead == 0) {
-		ExpandPoolSize();
+		ExpandPoolSize(size);
 	}
 	FreeStore* head = freeStoreHead;
 	freeStoreHead = head->next;
@@ -32,8 +32,8 @@ void MemoryManager::Free(void* ptr) {
 	freeStoreHead = head;
 }
 
-void MemoryManager::ExpandPoolSize() {
-	size_t size = (sizeof(Vector3) > sizeof(FreeStore*) ? sizeof(Vector3) : sizeof(FreeStore*));
+void MemoryManager::ExpandPoolSize(size_t iSize) {
+	size_t size = (iSize > sizeof(FreeStore*) ? iSize : sizeof(FreeStore*));
 	FreeStore* head = reinterpret_cast<FreeStore*> (new char[size]);
 	freeStoreHead = head;
 

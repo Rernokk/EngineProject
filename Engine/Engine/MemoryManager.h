@@ -11,7 +11,7 @@ class MemoryManager : public MonoBehaviour, public Singleton<MemoryManager>, pub
 		FreeStore* next;
 	};
 
-	void ExpandPoolSize();
+	void ExpandPoolSize(size_t size);
 	void CleanUp();
 	FreeStore* freeStoreHead;
 
@@ -25,7 +25,7 @@ class MemoryManager : public MonoBehaviour, public Singleton<MemoryManager>, pub
 
 		MemoryManager() {
 			freeStoreHead = 0;
-			ExpandPoolSize();
+			ExpandPoolSize(1);
 		}
 
 		virtual ~MemoryManager() {
