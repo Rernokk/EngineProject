@@ -117,6 +117,7 @@
   <ItemGroup>
     <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="FileSystemManager.h" />
+    <ClInclude Include="GameWorld.h" />
     <ClInclude Include="IMemoryManager.h" />
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="MonoBehaviour.h" />
@@ -130,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="AnimationManager.cpp" />
     <ClCompile Include="FileSystemManager.cpp" />
+    <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
     <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="RenderManager.cpp" />
