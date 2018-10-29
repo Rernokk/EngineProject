@@ -5,6 +5,9 @@
 #include <ppltasks.h>
 #include <synchapi.h>
 #include <vector>
+#include <random>
+#include <algorithm>
+
 
 using namespace DXApp;
 
@@ -20,16 +23,55 @@ Platform::String^ TrackingKey = "Tracking";
 
 //Assignment Stuff
 struct CubeData {
-	VertexPositionColor vertexColorDataArray[24];
-	unsigned short triangles[36];
+	VertexPositionColor vertexColorDataArray[72];
+	unsigned short triangles[108];
 };
 
-float offset = 0.0;
+float offset = 1.0;
 std::vector<CubeData> cubeData;
 
 void createCubeSet(std::vector<CubeData> * cubeCollection, XMFLOAT3 origin) {
-	VertexPositionColor vertexSet[24] = {
+	VertexPositionColor vertexSet[72] = {
+		//Cube 1
 		//Front
+		{ XMFLOAT3(0.5f, -0.5f,  0.5f),	 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(0.5f,  0.5f,  0.5f),	 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(-0.5f, -0.5f,  0.5f),  XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(-0.5f,  0.5f,  0.5f),	 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+
+		//Back
+		{ XMFLOAT3(0.5f, -0.5f, -0.5f),	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(0.5f,  0.5f, -0.5f),	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(-0.5f, -0.5f, -0.5f),	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(-0.5f,  0.5f, -0.5f),  XMFLOAT3(0.0f, 1.0f, 0.0f) },
+
+		//Left
+		{ XMFLOAT3(-0.5f, -0.5f, -0.5f),	 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f,  0.5f, -0.5f),	 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f, -0.5f,  0.5f),	 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f,  0.5f,  0.5f),	 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+
+		//Right
+		{ XMFLOAT3(0.5f, -0.5f,  0.5f),	 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(0.5f,  0.5f,  0.5f),	 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(0.5f, -0.5f, -0.5f),	 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(0.5f,  0.5f, -0.5f),	 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+
+		//Top
+		{ XMFLOAT3(0.5f, 0.5f, -0.5f),		 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3(0.5f, 0.5f,  0.5f),		 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f, 0.5f, -0.5f),	 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f, 0.5f,  0.5f),	 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+
+		//Bottom
+		{ XMFLOAT3(0.5f, -0.5f,  0.5f),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(0.5f, -0.5f, -0.5f),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f, -0.5f,  0.5f),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f, -0.5f, -0.5f),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		//End Cube 1
+
+		//Cube 2
+
 		{ XMFLOAT3(0.5f + origin.x, -0.5f + origin.y,  0.5f + origin.z),	 XMFLOAT3(1.0f, 0.0f, 0.0f) },
 		{ XMFLOAT3(0.5f + origin.x,  0.5f + origin.y,  0.5f + origin.z),	 XMFLOAT3(1.0f, 0.0f, 0.0f) },
 		{ XMFLOAT3(-0.5f + origin.x, -0.5f + origin.y,  0.5f + origin.z),  XMFLOAT3(1.0f, 0.0f, 0.0f) },
@@ -64,26 +106,104 @@ void createCubeSet(std::vector<CubeData> * cubeCollection, XMFLOAT3 origin) {
 		{ XMFLOAT3(0.5f + origin.x, -0.5f + origin.y, -0.5f + origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
 		{ XMFLOAT3(-0.5f + origin.x, -0.5f + origin.y,  0.5f + origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
 		{ XMFLOAT3(-0.5f + origin.x, -0.5f + origin.y, -0.5f + origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		//End Cube 2
+
+		//Cube 3
+
+		{ XMFLOAT3(0.5f + (2 * origin.x), -0.5f + (2 * origin.y),  0.5f + (2 * origin.z)),	 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(0.5f + (2 * origin.x),  0.5f + (2 * origin.y),  0.5f + (2 * origin.z)),	 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(-0.5f + (2 * origin.x), -0.5f + (2 * origin.y),  0.5f + (2 * origin.z)),  XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(-0.5f + (2 * origin.x),  0.5f + (2 * origin.y),  0.5f + (2 * origin.z)),	 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+
+		//Back
+		{ XMFLOAT3(0.5f + (2 * origin.x), -0.5f + (2 * origin.y), -0.5f + (2 * origin.z)),	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(0.5f + (2 * origin.x),  0.5f + (2 * origin.y), -0.5f + (2 * origin.z)),	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(-0.5f + (2 * origin.x), -0.5f + (2 * origin.y), -0.5f + (2 * origin.z)),	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(-0.5f + (2 * origin.x),  0.5f + (2 * origin.y), -0.5f + (2 * origin.z)),  XMFLOAT3(0.0f, 1.0f, 0.0f) },
+
+		//Left
+		{ XMFLOAT3(-0.5f + (2 * origin.x), -0.5f + (2 * origin.y), -0.5f + (2 * origin.z)),	 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f + (2 * origin.x),  0.5f + (2 * origin.y), -0.5f + (2 * origin.z)),	 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f + (2 * origin.x), -0.5f + (2 * origin.y),  0.5f + (2 * origin.z)),	 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f + (2 * origin.x),  0.5f + (2 * origin.y),  0.5f + (2 * origin.z)),	 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+
+		//Right
+		{ XMFLOAT3(0.5f + (2 * origin.x), -0.5f + (2 * origin.y),  0.5f + (2 * origin.z)),	 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(0.5f + (2 * origin.x),  0.5f + (2 * origin.y),  0.5f + (2 * origin.z)),	 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(0.5f + (2 * origin.x), -0.5f + (2 * origin.y), -0.5f + (2 * origin.z)),	 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(0.5f + (2 * origin.x),  0.5f + (2 * origin.y), -0.5f + (2 * origin.z)),	 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+
+		//Top
+		{ XMFLOAT3(0.5f + (2 * origin.x), 0.5f + (2 * origin.y), -0.5f + (2 * origin.z)),		 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3(0.5f + (2 * origin.x), 0.5f + (2 * origin.y),  0.5f + (2 * origin.z)),		 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f + (2 * origin.x), 0.5f + (2 * origin.y), -0.5f + (2 * origin.z)),	 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f + (2 * origin.x), 0.5f + (2 * origin.y),  0.5f + (2 * origin.z)),	 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+
+		//Bottom
+		{ XMFLOAT3(0.5f + (2 * origin.x), -0.5f + (2 * origin.y),  0.5f + (2 * origin.z)),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(0.5f + (2 * origin.x), -0.5f + (2 * origin.y), -0.5f + (2 * origin.z)),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f + (2 * origin.x), -0.5f + (2 * origin.y),  0.5f + (2 * origin.z)),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f + (2 * origin.x), -0.5f + (2 * origin.y), -0.5f + (2 * origin.z)),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		//End Cube 3
 	};
 
-	unsigned short triangles[36] = {
-			0, 2, 1, // Front
-			1, 2, 3,
+	unsigned short triangles[108] = {
+		//Cube 1
+		0, 2, 1, // Front
+		1, 2, 3,
 
-			4, 5, 6, // Back
-			5, 7, 6,
+		4, 5, 6, // Back
+		5, 7, 6,
 
-			8, 9, 10, // Left
-			10, 9, 11,
+		8, 9, 10, // Left
+		10, 9, 11,
 
-			12, 13, 14, // Right
-			14, 13, 15,
+		12, 13, 14, // Right
+		14, 13, 15,
 
-			16, 17, 18, // Top
-			18, 17, 19,
+		16, 17, 18, // Top
+		18, 17, 19,
 
-			20, 21, 22, // Bottom
-			22, 21, 23,
+		20, 21, 22, // Bottom
+		22, 21, 23,
+
+		//Cube 2
+		24 + 0, 24 + 2, 24 + 1, // Front
+		24 + 1, 24 + 2, 24 + 3,
+
+		24 + 4, 24 + 5, 24 + 6, // Back
+		24 + 5, 24 + 7, 24 + 6,
+
+		24 + 8, 24 + 9, 24 + 10, // Left
+		24 + 10,24 + 9, 24 + 11,
+
+		24 + 12,24 + 13,24 + 14, // Right
+		24 + 14,24 + 13,24 + 15,
+
+		24 + 16,24 + 17,24 + 18, // Top
+		24 + 18,24 + 17,24 + 19,
+
+		24 + 20,24 + 21,24 + 22, // Bottom
+		24 + 22,24 + 21,24 + 23,
+
+		//Cube 3
+		48 + 0, 48 + 2, 48 + 1, // Front
+		48 + 1, 48 + 2, 48 + 3,
+
+		48 + 4, 48 + 5, 48 + 6, // Back
+		48 + 5, 48 + 7, 48 + 6,
+
+		48 + 8, 48 + 9, 48 + 10, // Left
+		48 + 10,48 + 9, 48 + 11,
+
+		48 + 12,48 + 13,48 + 14, // Right
+		48 + 14,48 + 13,48 + 15,
+
+		48 + 16,48 + 17,48 + 18, // Top
+		48 + 18,48 + 17,48 + 19,
+
+		48 + 20,48 + 21,48 + 22, // Bottom
+		48 + 22,48 + 21,48 + 23,
 	};
 
 	CubeData newCube;
@@ -191,55 +311,144 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 		DX::ThrowIfFailed(d3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_deviceResources->GetCommandAllocator(), m_pipelineState.Get(), IID_PPV_ARGS(&m_commandList)));
 		NAME_D3D12_OBJECT(m_commandList);
 
-		// Cube vertices. Each vertex has a position and a color.
-		//VertexPositionColor cubeVertices[] =
-		//{
-		//	//Front
-		//	{ XMFLOAT3(0.5f + origin.x, -0.5f + origin.y,  0.5f + origin.z),		 XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		//	{ XMFLOAT3(0.5f + origin.x,  0.5f + origin.y,  0.5f + origin.z),			 XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		//	{ XMFLOAT3(-0.5f + origin.x, -0.5f + origin.y,  0.5f + origin.z),  XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		//	{ XMFLOAT3(-0.5f + origin.x,  0.5f + origin.y,  0.5f + origin.z),	 XMFLOAT3(1.0f, 0.0f, 0.0f) },
 
-		//	//Back
-		//	{ XMFLOAT3(0.5f + origin.x, -0.5f + origin.y, -0.5f + origin.z),		 XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		//	{ XMFLOAT3(0.5f + origin.x,  0.5f + origin.y, -0.5f + origin.z),		 XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		//	{ XMFLOAT3(-0.5f + origin.x, -0.5f + origin.y, -0.5f + origin.z),	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		//	{ XMFLOAT3(-0.5f + origin.x,  0.5f + origin.y, -0.5f + origin.z), 	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		/*cubeData = std::vector<CubeData>();
+		createCubeSet(&cubeData, XMFLOAT3(0, offset, 0));*/
 
-		//	//Left
-		//	{ XMFLOAT3(-0.5f + origin.x, -0.5f + origin.y, -0.5f + origin.z),	 XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		//	{ XMFLOAT3(-0.5f + origin.x,  0.5f + origin.y, -0.5f + origin.z),		 XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		//	{ XMFLOAT3(-0.5f + origin.x, -0.5f + origin.y,  0.5f + origin.z),		 XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		//	{ XMFLOAT3(-0.5f + origin.x,  0.5f + origin.y,  0.5f + origin.z),		 XMFLOAT3(0.0f, 0.0f, 1.0f) },
-
-		//	//Right
-		//	{ XMFLOAT3(0.5f + origin.x, -0.5f + origin.y,  0.5f + origin.z),		 XMFLOAT3(1.0f, 1.0f, 0.0f) },
-		//	{ XMFLOAT3(0.5f + origin.x,  0.5f + origin.y,  0.5f + origin.z),			 XMFLOAT3(1.0f, 1.0f, 0.0f) },
-		//	{ XMFLOAT3(0.5f + origin.x, -0.5f + origin.y, -0.5f + origin.z),		 XMFLOAT3(1.0f, 1.0f, 0.0f) },
-		//	{ XMFLOAT3(0.5f + origin.x,  0.5f + origin.y, -0.5f + origin.z),	 XMFLOAT3(1.0f, 1.0f, 0.0f) },
-
-		//	//Top
-		//	{ XMFLOAT3(0.5f + origin.x, 0.5f + origin.y, -0.5f + origin.z),		 XMFLOAT3(0.0f, 1.0f, 1.0f) },
-		//	{ XMFLOAT3(0.5f + origin.x, 0.5f + origin.y,  0.5f + origin.z),		 XMFLOAT3(0.0f, 1.0f, 1.0f) },
-		//	{ XMFLOAT3(-0.5f + origin.x, 0.5f + origin.y, -0.5f + origin.z),	 XMFLOAT3(0.0f, 1.0f, 1.0f) },
-		//	{ XMFLOAT3(-0.5f + origin.x, 0.5f + origin.y,  0.5f + origin.z),	 XMFLOAT3(0.0f, 1.0f, 1.0f) },
-
-		//	//Bottom
-		//	{ XMFLOAT3(0.5f + origin.x, -0.5f + origin.y,  0.5f + origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
-		//	{ XMFLOAT3(0.5f + origin.x, -0.5f + origin.y, -0.5f + origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
-		//	{ XMFLOAT3(-0.5f + origin.x, -0.5f + origin.y,  0.5f + origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
-		//	{ XMFLOAT3(-0.5f + origin.x, -0.5f + origin.y, -0.5f + origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
-		//};
-		cubeData = std::vector<CubeData>();
-		createCubeSet(&cubeData, XMFLOAT3(0, offset, 0));
-
-		const UINT vertexBufferSize = sizeof(cubeData[0].vertexColorDataArray);
+		//const UINT vertexBufferSize = sizeof(cubeData[0].vertexColorDataArray);
 
 		// Create the vertex buffer resource in the GPU's default heap and copy vertex data into it using the upload heap.
 		// The upload resource must not be released until after the GPU has finished using it.
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexBufferUpload;
-
 		CD3DX12_HEAP_PROPERTIES defaultHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
+		CD3DX12_HEAP_PROPERTIES uploadHeapProperties(D3D12_HEAP_TYPE_UPLOAD);
+
+		// Cube vertices. Each vertex has a position and a color.
+		XMFLOAT3 origin = XMFLOAT3(1, 0, 0);
+		srand(time(NULL));
+
+		double scale0 = sin(rand());
+		scale0 = max(.25, min(scale0, 1));
+		double scale1 = sin(rand());
+		scale1 = max(.25, min(scale1, 1));
+		double scale2 = sin(rand());
+		scale2 = max(.25, min(scale2, 1));
+
+		VertexPositionColor cubeVertices[] =
+		{
+			//Cube 1
+			//Front
+			{ XMFLOAT3(0.5f * scale0 + origin.x, -0.5f * scale0 + origin.y,  0.5f * scale0 + origin.z),		 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale0 + origin.x,  0.5f * scale0 + origin.y,  0.5f * scale0 + origin.z),			 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+			{ XMFLOAT3(-0.5f * scale0 + origin.x, -0.5f * scale0 + origin.y,  0.5f * scale0 + origin.z),  XMFLOAT3(1.0f, 0.0f, 0.0f) },
+			{ XMFLOAT3(-0.5f * scale0 + origin.x,  0.5f * scale0 + origin.y,  0.5f * scale0 + origin.z),	 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+
+			//Back
+			{ XMFLOAT3(0.5f * scale0 + origin.x, -0.5f * scale0 + origin.y, -0.5f * scale0 + origin.z),		 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale0 + origin.x,  0.5f * scale0 + origin.y, -0.5f * scale0 + origin.z),		 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(-0.5f * scale0 + origin.x, -0.5f * scale0 + origin.y, -0.5f * scale0 + origin.z),	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(-0.5f * scale0 + origin.x,  0.5f * scale0 + origin.y, -0.5f * scale0 + origin.z), 	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+
+			//Left
+			{ XMFLOAT3(-0.5f * scale0 + origin.x, -0.5f * scale0 + origin.y, -0.5f * scale0 + origin.z),	 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale0 + origin.x,  0.5f * scale0 + origin.y, -0.5f * scale0 + origin.z),		 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale0 + origin.x, -0.5f * scale0 + origin.y,  0.5f * scale0 + origin.z),		 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale0 + origin.x,  0.5f * scale0 + origin.y,  0.5f * scale0 + origin.z),		 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+
+			//Right
+			{ XMFLOAT3(0.5f * scale0 + origin.x, -0.5f * scale0 + origin.y,  0.5f * scale0 + origin.z),		 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale0 + origin.x,  0.5f * scale0 + origin.y,  0.5f * scale0 + origin.z),			 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale0 + origin.x, -0.5f * scale0 + origin.y, -0.5f * scale0 + origin.z),		 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale0 + origin.x,  0.5f * scale0 + origin.y, -0.5f * scale0 + origin.z),	 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+
+			//Top
+			{ XMFLOAT3(0.5f * scale0 + origin.x, 0.5f * scale0 + origin.y, -0.5f * scale0 + origin.z),		 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+			{ XMFLOAT3(0.5f * scale0 + origin.x, 0.5f * scale0 + origin.y,  0.5f * scale0 + origin.z),		 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale0 + origin.x, 0.5f * scale0 + origin.y, -0.5f * scale0 + origin.z),	 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale0 + origin.x, 0.5f * scale0 + origin.y,  0.5f * scale0 + origin.z),	 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+
+			//Bottom
+			{ XMFLOAT3(0.5f * scale0 + origin.x, -0.5f * scale0 + origin.y,  0.5f * scale0 + origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(0.5f * scale0 + origin.x, -0.5f * scale0 + origin.y, -0.5f * scale0 + origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale0 + origin.x, -0.5f * scale0 + origin.y,  0.5f * scale0 + origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale0 + origin.x, -0.5f * scale0 + origin.y, -0.5f * scale0 + origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+
+			//Cube 2
+			//Front
+			{ XMFLOAT3(0.5f * scale1 - origin.x, -0.5f * scale1 - origin.y,  0.5f * scale1 - origin.z),		 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale1 - origin.x,  0.5f * scale1 - origin.y,  0.5f * scale1 - origin.z),			 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+			{ XMFLOAT3(-0.5f * scale1 - origin.x, -0.5f * scale1 - origin.y,  0.5f * scale1 - origin.z),  XMFLOAT3(1.0f, 0.0f, 0.0f) },
+			{ XMFLOAT3(-0.5f * scale1 - origin.x,  0.5f * scale1 - origin.y,  0.5f * scale1 - origin.z),	 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+
+			//Back
+			{ XMFLOAT3(0.5f * scale1 - origin.x, -0.5f * scale1 - origin.y, -0.5f * scale1 - origin.z),		 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale1 - origin.x,  0.5f * scale1 - origin.y, -0.5f * scale1 - origin.z),		 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(-0.5f * scale1 - origin.x, -0.5f * scale1 - origin.y, -0.5f * scale1 - origin.z),	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(-0.5f * scale1 - origin.x,  0.5f * scale1 - origin.y, -0.5f * scale1 - origin.z), 	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+
+			//Left
+			{ XMFLOAT3(-0.5f * scale1 - origin.x, -0.5f * scale1 - origin.y, -0.5f * scale1 - origin.z),	 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale1 - origin.x,  0.5f * scale1 - origin.y, -0.5f * scale1 - origin.z),		 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale1 - origin.x, -0.5f * scale1 - origin.y,  0.5f * scale1 - origin.z),		 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale1 - origin.x,  0.5f * scale1 - origin.y,  0.5f * scale1 - origin.z),		 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+
+			//Right
+			{ XMFLOAT3(0.5f * scale1 - origin.x, -0.5f * scale1 - origin.y,  0.5f * scale1 - origin.z),		 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale1 - origin.x,  0.5f * scale1 - origin.y,  0.5f * scale1 - origin.z),			 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale1 - origin.x, -0.5f * scale1 - origin.y, -0.5f * scale1 - origin.z),		 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale1 - origin.x,  0.5f * scale1 - origin.y, -0.5f * scale1 - origin.z),	 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+
+			//Top
+			{ XMFLOAT3(0.5f * scale1 - origin.x, 0.5f * scale1 - origin.y, -0.5f * scale1 - origin.z),		 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+			{ XMFLOAT3(0.5f * scale1 - origin.x, 0.5f * scale1 - origin.y,  0.5f * scale1 - origin.z),		 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale1 - origin.x, 0.5f * scale1 - origin.y, -0.5f * scale1 - origin.z),	 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale1 - origin.x, 0.5f * scale1 - origin.y,  0.5f * scale1 - origin.z),	 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+
+			//Bottom
+			{ XMFLOAT3(0.5f * scale1 - origin.x, -0.5f * scale1 - origin.y,  0.5f * scale1 - origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(0.5f * scale1 - origin.x, -0.5f * scale1 - origin.y, -0.5f * scale1 - origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale1 - origin.x, -0.5f * scale1 - origin.y,  0.5f * scale1 - origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale1 - origin.x, -0.5f * scale1 - origin.y, -0.5f * scale1 - origin.z),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+			
+			//Cube 3
+			//Front
+			{ XMFLOAT3(0.5f * scale2, -0.5f * scale2 + 1,  0.5f * scale2),		 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale2,  0.5f * scale2 + 1,  0.5f * scale2),			 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+			{ XMFLOAT3(-0.5f * scale2, -0.5f * scale2 + 1,  0.5f * scale2),  XMFLOAT3(1.0f, 0.0f, 0.0f) },
+			{ XMFLOAT3(-0.5f * scale2,  0.5f * scale2 + 1,  0.5f * scale2),	 XMFLOAT3(1.0f, 0.0f, 0.0f) },
+
+			//Back
+			{ XMFLOAT3(0.5f * scale2, -0.5f * scale2 + 1, -0.5f * scale2),		 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale2,  0.5f * scale2 + 1, -0.5f * scale2),		 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(-0.5f * scale2, -0.5f * scale2 + 1, -0.5f * scale2),	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(-0.5f * scale2,  0.5f * scale2 + 1, -0.5f * scale2), 	 XMFLOAT3(0.0f, 1.0f, 0.0f) },
+
+			//Left
+			{ XMFLOAT3(-0.5f * scale2, -0.5f * scale2 + 1, -0.5f * scale2),	 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale2,  0.5f * scale2 + 1, -0.5f * scale2),		 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale2, -0.5f * scale2 + 1,  0.5f * scale2),		 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale2,  0.5f * scale2 + 1,  0.5f * scale2),		 XMFLOAT3(0.0f, 0.0f, 1.0f) },
+
+			//Right
+			{ XMFLOAT3(0.5f * scale2, -0.5f * scale2 + 1,  0.5f * scale2),		 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale2,  0.5f * scale2 + 1,  0.5f * scale2),			 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale2, -0.5f * scale2 + 1, -0.5f * scale2),		 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+			{ XMFLOAT3(0.5f * scale2,  0.5f * scale2 + 1, -0.5f * scale2),	 XMFLOAT3(1.0f, 1.0f, 0.0f) },
+
+			//Top
+			{ XMFLOAT3(0.5f * scale2, 0.5f * scale2 + 1, -0.5f * scale2),		 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+			{ XMFLOAT3(0.5f * scale2, 0.5f * scale2 + 1,  0.5f * scale2),		 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale2, 0.5f * scale2 + 1, -0.5f * scale2),	 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale2, 0.5f * scale2 + 1,  0.5f * scale2),	 XMFLOAT3(0.0f, 1.0f, 1.0f) },
+
+			//Bottom
+			{ XMFLOAT3(0.5f * scale2, -0.5f * scale2 + 1,  0.5f * scale2),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(0.5f * scale2, -0.5f * scale2 + 1, -0.5f * scale2),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale2, -0.5f * scale2 + 1,  0.5f * scale2),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+			{ XMFLOAT3(-0.5f * scale2, -0.5f * scale2 + 1, -0.5f * scale2),	 XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		};
+
+		const UINT vertexBufferSize = sizeof(cubeVertices);
 		CD3DX12_RESOURCE_DESC vertexBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize);
 		DX::ThrowIfFailed(d3dDevice->CreateCommittedResource(
 			&defaultHeapProperties,
@@ -249,7 +458,6 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 			nullptr,
 			IID_PPV_ARGS(&m_vertexBuffer)));
 
-		CD3DX12_HEAP_PROPERTIES uploadHeapProperties(D3D12_HEAP_TYPE_UPLOAD);
 		DX::ThrowIfFailed(d3dDevice->CreateCommittedResource(
 			&uploadHeapProperties,
 			D3D12_HEAP_FLAG_NONE,
@@ -263,7 +471,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 		// Upload the vertex buffer to the GPU.
 		{
 			D3D12_SUBRESOURCE_DATA vertexData = {};
-			vertexData.pData = reinterpret_cast<BYTE*>(cubeData[0].vertexColorDataArray);
+			vertexData.pData = reinterpret_cast<BYTE*>(cubeVertices);
 			vertexData.RowPitch = vertexBufferSize;
 			vertexData.SlicePitch = vertexData.RowPitch;
 
@@ -274,69 +482,110 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 			m_commandList->ResourceBarrier(1, &vertexBufferResourceBarrier);
 		}
 
+
 		// Load mesh indices. Each trio of indices represents a triangle to be rendered on the screen.
 		// For example: 0,2,1 means that the vertices with indexes 0, 2 and 1 from the vertex buffer compose the
 		// first triangle of this mesh.
-		//unsigned short cubeIndices[] =
-		//{
-		//	0, 2, 1, // Front
-		//	1, 2, 3,
+		unsigned short cubeIndices[] =
+		{
+			//Cube 1
+			0, 2, 1, // Front
+			1, 2, 3,
 
-		//	4, 5, 6, // Back
-		//	5, 7, 6,
+			4, 5, 6, // Back
+			5, 7, 6,
 
-		//	8, 9, 10, // Left
-		//	10, 9, 11,
+			8, 9, 10, // Left
+			10, 9, 11,
 
-		//	12, 13, 14, // Right
-		//	14, 13, 15,
+			12, 13, 14, // Right
+			14, 13, 15,
 
-		//	16, 17, 18, // Top
-		//	18, 17, 19,
+			16, 17, 18, // Top
+			18, 17, 19,
 
-		//	20, 21, 22, // Bottom
-		//	22, 21, 23,
-		//};
+			20, 21, 22, // Bottom
+			22, 21, 23,
 
-		const UINT indexBufferSize = sizeof(cubeData[0].triangles);
+			//Cube 2
+			24 + 0, 24 + 2, 24 + 1, // Front
+			24 + 1, 24 + 2, 24 + 3,
+
+			24 + 4, 24 + 5, 24 + 6, // Back
+			24 + 5, 24 + 7, 24 + 6,
+
+			24 + 8, 24 + 9, 24 + 10, // Left
+			24 + 10, 24 + 9, 24 + 11,
+
+			24 + 12, 24 + 13, 24 + 14, // Right
+			24 + 14, 24 + 13, 24 + 15,
+
+			24 + 16, 24 + 17, 24 + 18, // Top
+			24 + 18, 24 + 17, 24 + 19,
+
+			24 + 20, 24 + 21, 24 + 22, // Bottom
+			24 + 22, 24 + 21, 24 + 23,
+
+			//Cube 3
+			48 + 0, 48 + 2, 48 + 1, // Front
+			48 + 1, 48 + 2, 48 + 3,
+
+			48 + 4, 48 + 5, 48 + 6, // Back
+			48 + 5, 48 + 7, 48 + 6,
+
+			48 + 8, 48 + 9, 48 + 10, // Left
+			48 + 10, 48 + 9, 48 + 11,
+
+			48 + 12, 48 + 13, 48 + 14, // Right
+			48 + 14, 48 + 13, 48 + 15,
+
+			48 + 16, 48 + 17, 48 + 18, // Top
+			48 + 18, 48 + 17, 48 + 19,
+
+			48 + 20, 48 + 21, 48 + 22, // Bottom
+			48 + 22, 48 + 21, 48 + 23,
+		};
+
+		//const UINT indexBufferSize = sizeof(cubeData[0].triangles);
+		const UINT indexBufferSize = sizeof(cubeIndices);
 
 		// Create the index buffer resource in the GPU's default heap and copy index data into it using the upload heap.
 		// The upload resource must not be released until after the GPU has finished using it.
 		Microsoft::WRL::ComPtr<ID3D12Resource> indexBufferUpload;
+		for (int i = 0; i < 2; i++) {
+			CD3DX12_RESOURCE_DESC indexBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(indexBufferSize);
+			DX::ThrowIfFailed(d3dDevice->CreateCommittedResource(
+				&defaultHeapProperties,
+				D3D12_HEAP_FLAG_NONE,
+				&indexBufferDesc,
+				D3D12_RESOURCE_STATE_COPY_DEST,
+				nullptr,
+				IID_PPV_ARGS(&m_indexBuffer)));
 
-		CD3DX12_RESOURCE_DESC indexBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(indexBufferSize);
-		DX::ThrowIfFailed(d3dDevice->CreateCommittedResource(
-			&defaultHeapProperties,
-			D3D12_HEAP_FLAG_NONE,
-			&indexBufferDesc,
-			D3D12_RESOURCE_STATE_COPY_DEST,
-			nullptr,
-			IID_PPV_ARGS(&m_indexBuffer)));
+			DX::ThrowIfFailed(d3dDevice->CreateCommittedResource(
+				&uploadHeapProperties,
+				D3D12_HEAP_FLAG_NONE,
+				&indexBufferDesc,
+				D3D12_RESOURCE_STATE_GENERIC_READ,
+				nullptr,
+				IID_PPV_ARGS(&indexBufferUpload)));
 
-		DX::ThrowIfFailed(d3dDevice->CreateCommittedResource(
-			&uploadHeapProperties,
-			D3D12_HEAP_FLAG_NONE,
-			&indexBufferDesc,
-			D3D12_RESOURCE_STATE_GENERIC_READ,
-			nullptr,
-			IID_PPV_ARGS(&indexBufferUpload)));
+			NAME_D3D12_OBJECT(m_indexBuffer);
 
-		NAME_D3D12_OBJECT(m_indexBuffer);
+			// Upload the index buffer to the GPU.
+			{
+				D3D12_SUBRESOURCE_DATA indexData = {};
+				indexData.pData = reinterpret_cast<BYTE*>(cubeIndices);
+				indexData.RowPitch = indexBufferSize;
+				indexData.SlicePitch = indexData.RowPitch;
 
-		// Upload the index buffer to the GPU.
-		{
-			D3D12_SUBRESOURCE_DATA indexData = {};
-			indexData.pData = reinterpret_cast<BYTE*>(cubeData[0].triangles);
-			indexData.RowPitch = indexBufferSize;
-			indexData.SlicePitch = indexData.RowPitch;
+				UpdateSubresources(m_commandList.Get(), m_indexBuffer.Get(), indexBufferUpload.Get(), 0, 0, 1, &indexData);
 
-			UpdateSubresources(m_commandList.Get(), m_indexBuffer.Get(), indexBufferUpload.Get(), 0, 0, 1, &indexData);
-
-			CD3DX12_RESOURCE_BARRIER indexBufferResourceBarrier =
-				CD3DX12_RESOURCE_BARRIER::Transition(m_indexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_INDEX_BUFFER);
-			m_commandList->ResourceBarrier(1, &indexBufferResourceBarrier);
+				CD3DX12_RESOURCE_BARRIER indexBufferResourceBarrier =
+					CD3DX12_RESOURCE_BARRIER::Transition(m_indexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_INDEX_BUFFER);
+				m_commandList->ResourceBarrier(1, &indexBufferResourceBarrier);
+			}
 		}
-
 		// Create a descriptor heap for the constant buffers.
 		{
 			D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
@@ -390,10 +639,10 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 		// Create vertex/index buffer views.
 		m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
 		m_vertexBufferView.StrideInBytes = sizeof(VertexPositionColor);
-		m_vertexBufferView.SizeInBytes = sizeof(cubeData[0].vertexColorDataArray);
+		m_vertexBufferView.SizeInBytes = sizeof(cubeVertices);
 
 		m_indexBufferView.BufferLocation = m_indexBuffer->GetGPUVirtualAddress();
-		m_indexBufferView.SizeInBytes = sizeof(cubeData[0].triangles);
+		m_indexBufferView.SizeInBytes = sizeof(cubeIndices);
 		m_indexBufferView.Format = DXGI_FORMAT_R16_UINT;
 
 		// Wait for the command list to finish executing; the vertex/index buffers need to be uploaded to the GPU before the upload resources go out of scope.
@@ -445,7 +694,7 @@ void Sample3DSceneRenderer::CreateWindowSizeDependentResources()
 	);
 
 	// Eye is at (0,0.7,1.5), looking at point (0,-0.1,0) with the up-vector along the y-axis.
-	static const XMVECTORF32 eye = { 0.0f, 0.7f, 1.5f, 0.0f };
+	static const XMVECTORF32 eye = { 0.0f, 1.7f, 2.5f, 0.0f };
 	static const XMVECTORF32 at = { 0.0f, -0.1f, 0.0f, 0.0f };
 	static const XMVECTORF32 up = { 0.0f, 1.0f, 0.0f, 0.0f };
 
@@ -468,6 +717,7 @@ void Sample3DSceneRenderer::Update(DX::StepTimer const& timer)
 		// Update the constant buffer resource.
 		UINT8* destination = m_mappedConstantBuffer + (m_deviceResources->GetCurrentFrameIndex() * c_alignedConstantBufferSize);
 		memcpy(destination, &m_constantBufferData, sizeof(m_constantBufferData));
+
 	}
 }
 
@@ -513,8 +763,8 @@ void Sample3DSceneRenderer::Rotate(float radians)
 	//XMStoreFloat4x4(&m_constantBufferData.model, XMMatrixTranspose(XMMatrixRotationY(radians)));
 	//XMStoreFloat4x4(&m_constantBufferData.model, XMMatrixTranspose(XMMatrixTranslation(0, sinf(m_angle), 0)));
 	tMat = XMMatrixTranspose(XMMatrixRotationY(radians));
-	tMat = XMMatrixMultiply(tMat, XMMatrixTranspose(XMMatrixTranslation(0, sinf(m_angle * 5), 0)));
-	tMat = XMMatrixMultiply(tMat, XMMatrixTranspose(XMMatrixTranslation(sinf(m_angle), 0, 0)));
+	//tMat = XMMatrixMultiply(tMat, XMMatrixTranspose(XMMatrixTranslation(0, sinf(m_angle * 5), 0)));
+	//tMat = XMMatrixMultiply(tMat, XMMatrixTranspose(XMMatrixTranslation(sinf(m_angle), 0, 0)));
 	XMStoreFloat4x4(&m_constantBufferData.model, tMat);
 }
 
@@ -584,7 +834,7 @@ bool Sample3DSceneRenderer::Render()
 		m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
 		m_commandList->IASetIndexBuffer(&m_indexBufferView);
-		m_commandList->DrawIndexedInstanced(36, 1, 0, 0, 0);
+		m_commandList->DrawIndexedInstanced(36 * 3, 1, 0, 0, 0);
 
 		// Indicate that the render target will now be used to present when the command list is done executing.
 		CD3DX12_RESOURCE_BARRIER presentResourceBarrier =
